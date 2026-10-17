@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#14213d">
-<link rel="manifest" href="./manifest.json">
-<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <title>Memória de Números</title>
 <style>
 * { box-sizing: border-box; }
@@ -14,13 +16,10 @@ body { margin:0; padding:16px 10px 28px; background:#0b132b; color:#fff; font-fa
 header { text-align:center; margin:5px 0 16px; }
 h1 { font-size:30px; margin:0 0 8px; }
 .subtitle { color:#d7e2fa; font-size:15px; line-height:1.5; }
-.level-picker { display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:10px; margin:0 0 14px; color:#d7e2fa; font-size:15px; }
-.level-picker label { font-weight:bold; }
-.level-picker select { max-width:100%; min-height:44px; padding:8px 12px; border-radius:10px; border:1px solid #6d83ad; background:#20365d; color:#fff; font-size:16px; font-weight:bold; }
-.level-picker select:disabled { opacity:.65; }
 .panel { margin:12px 0; padding:16px; background:#172344; border:1px solid #344a75; border-radius:18px; }
 .progress { display:flex; justify-content:center; flex-wrap:wrap; gap:6px; margin-bottom:14px; }
-.stage { border:1px solid #43577e; border-radius:9px; padding:7px 10px; color:#d7e2fa; background:#1a2a4c; font-weight:bold; }
+.stage { border:1px solid #43577e; border-radius:9px; padding:7px 10px; color:#d7e2fa; background:#1a2a4c; font-weight:bold; cursor:pointer; user-select:none; }
+.stage:active { transform:scale(.96); }
 .stage.current { background:#245ca5; border-color:#75b8ff; color:#fff; }
 .stage.done { background:#146746; border-color:#39d98a; color:#fff; }
 .status { text-align:center; min-height:24px; font-weight:bold; color:#d7e2fa; line-height:1.4; }
@@ -46,29 +45,44 @@ button { font-family:inherit; cursor:pointer; touch-action:manipulation; }
 .message { text-align:center; color:#d7e2fa; line-height:1.5; min-height:42px; padding-top:10px; }
 .message.good { color:#65f0ad; font-weight:bold; }
 .message.bad { color:#ff9ba5; font-weight:bold; }
-#resultActions[hidden], #cancelActions[hidden] { display:none !important; }
+#resultActions[hidden] { display:none !important; }
 @media(max-width:390px) { .panel { padding:12px; } .stage { padding:7px 8px; } .key { min-height:50px; } h1 { font-size:27px; } }
+
+/* Ajustes compactos para telas de iPhone */
+body { padding: 7px 8px 10px; }
+header { margin: 2px 0 7px; }
+h1 { font-size: 23px; margin: 0; }
+.panel { margin: 6px 0; padding: 9px; border-radius: 14px; }
+.progress { gap: 4px; margin-bottom: 7px; }
+.stage { padding: 4px 7px; font-size: 12px; border-radius: 7px; }
+.status { min-height: 18px; font-size: 13px; }
+.sequence-box { min-height: 58px; margin: 6px 0; padding: 5px; border-radius: 10px; }
+.sequence { font-size: clamp(25px, 7vw, 36px); line-height: 1.25; letter-spacing: 2px; }
+.instruction { min-height: 18px; font-size: 12px; line-height: 1.25; margin: 4px 0; }
+.entry { min-height: 30px; font-size: 23px; letter-spacing: 3px; padding: 2px; }
+.counter { font-size: 11px; margin: 2px 0 6px; }
+.keypad { gap: 5px; }
+.key { min-height: 39px; border-radius: 8px; font-size: 20px; }
+.utility { font-size: 12px; }
+.actions { gap: 6px; margin-top: 7px; justify-content: center; }
+.action { flex: 0 1 auto; min-width: 0; min-height: 35px; padding: 7px 10px; border-radius: 9px; font-size: 12px; }
+.message { min-height: 24px; padding-top: 5px; font-size: 12px; line-height: 1.3; }
+@media(max-width:390px) {
+  .panel { padding: 8px; }
+  h1 { font-size: 21px; }
+  .stage { padding: 4px 6px; font-size: 11px; }
+  .key { min-height: 36px; }
+  .sequence-box { min-height: 52px; }
+}
+
 </style>
 </head>
 <body>
 <main class="app">
 <header>
   <h1>🧠 Memória de Números</h1>
-  <div class="subtitle">Observe os números e digite-os na mesma ordem.<br>Escolha com quantos números quer começar: de 4 a 10.</div>
 </header>
 <section class="panel">
-  <div class="level-picker">
-    <label for="startLevel">Quero começar com:</label>
-    <select id="startLevel" aria-label="Escolha o número inicial de dígitos">
-      <option value="4" selected>4 números</option>
-      <option value="5">5 números</option>
-      <option value="6">6 números</option>
-      <option value="7">7 números</option>
-      <option value="8">8 números</option>
-      <option value="9">9 números</option>
-      <option value="10">10 números</option>
-    </select>
-  </div>
   <div class="progress" id="progress">
     <span class="stage current" data-stage="4">4</span><span class="stage" data-stage="5">5</span><span class="stage" data-stage="6">6</span><span class="stage" data-stage="7">7</span><span class="stage" data-stage="8">8</span><span class="stage" data-stage="9">9</span><span class="stage" data-stage="10">10</span>
   </div>
@@ -87,9 +101,6 @@ button { font-family:inherit; cursor:pointer; touch-action:manipulation; }
     <button type="button" class="action primary" id="start" onclick="startGame()">🔢 Mostrar números</button>
     <button type="button" class="action secondary" id="submit" onclick="checkAnswer()" disabled>✓ Confirmar</button>
   </div>
-  <div class="actions" id="cancelActions" hidden>
-    <button type="button" class="action secondary" id="cancel" onclick="cancelChallenge()">✖ Cancelar desafio</button>
-  </div>
   <div class="actions" id="resultActions" hidden>
     <button type="button" class="action green" id="next" onclick="nextChallenge()">Próximo desafio</button>
     <button type="button" class="action secondary" id="retry" onclick="retryChallenge()">Tentar novamente</button>
@@ -99,7 +110,6 @@ button { font-family:inherit; cursor:pointer; touch-action:manipulation; }
 </main>
 <script>
 var stage = 4;
-var startStage = 4;
 var sequence = '';
 var entered = '';
 var state = 'ready';
@@ -135,7 +145,7 @@ function updateStages() {
     var n = Number(badges[i].getAttribute('data-stage'));
     badges[i].className = 'stage';
     if (n === stage) badges[i].className += ' current';
-    if ((n >= startStage && n < stage) || (state === 'finished' && n >= startStage && n <= 10)) badges[i].className += ' done';
+    if (n < stage || (state === 'finished' && n <= 10)) badges[i].className += ' done';
   }
   el('status').textContent = state === 'finished' ? 'Parabéns! Você completou todos os níveis!' : 'Desafio de ' + stage + ' números';
 }
@@ -145,9 +155,6 @@ function resetChallenge(text) {
   el('sequence').textContent = 'Pronto?';
   el('instruction').textContent = 'Clique em “Mostrar números” para começar.';
   el('resultActions').hidden = true;
-  el('cancelActions').hidden = true;
-  el('startLevel').disabled = false;
-  el('startLevel').value = String(startStage);
   el('start').disabled = false;
   el('start').textContent = '🔢 Mostrar números';
   el('submit').disabled = true;
@@ -155,9 +162,16 @@ function resetChallenge(text) {
   say(text || 'Memorize os números e digite-os na mesma ordem.');
   updateStages();
 }
+
+function selectStage(level) {
+  if (level < 4 || level > 10) return;
+  stage = level;
+  resetChallenge('Nível ' + stage + ' selecionado. Clique em “Mostrar números” para começar.');
+}
+
 function startGame() {
   if (showTimer !== null) { window.clearTimeout(showTimer); showTimer = null; }
-  if (state === 'finished') stage = startStage;
+  if (state === 'finished') stage = 4;
   sequence = '';
   for (var i = 0; i < stage; i++) sequence += String(Math.floor(Math.random() * 10));
   entered = '';
@@ -165,8 +179,6 @@ function startGame() {
   el('sequence').textContent = sequence.split('').join('   ');
   el('instruction').textContent = 'Memorize a ordem dos números…';
   el('resultActions').hidden = true;
-  el('cancelActions').hidden = false;
-  el('startLevel').disabled = true;
   el('start').disabled = true;
   el('start').textContent = 'Observe os números…';
   el('submit').disabled = true;
@@ -185,28 +197,6 @@ function startGame() {
     setKeys(true);
     updateStages();
   }, 4500 + (stage - 4) * 450);
-}
-function cancelChallenge() {
-  if (state !== 'showing' && state !== 'input') return;
-  if (showTimer !== null) {
-    window.clearTimeout(showTimer);
-    showTimer = null;
-  }
-  state = 'ready';
-  sequence = '';
-  entered = '';
-  el('sequence').textContent = 'Pronto?';
-  el('instruction').textContent = 'Desafio cancelado. Você pode começar novamente.';
-  el('startLevel').disabled = false;
-  el('start').disabled = false;
-  el('start').textContent = '🔢 Mostrar números';
-  el('submit').disabled = true;
-  el('resultActions').hidden = true;
-  el('cancelActions').hidden = true;
-  showEntry();
-  setKeys(false);
-  say('Desafio cancelado. Você pode iniciar novamente no mesmo nível.');
-  updateStages();
 }
 function pressDigit(digit) {
   if (state !== 'input' || entered.length >= stage) return;
@@ -229,8 +219,6 @@ function clearEntry() {
 function checkAnswer() {
   if (state !== 'input' || entered.length !== stage) return;
   setKeys(false);
-  el('startLevel').disabled = false;
-  el('cancelActions').hidden = true;
   el('resultActions').hidden = false;
   el('sequence').textContent = sequence.split('').join('   ');
   el('start').disabled = true;
@@ -242,7 +230,7 @@ function checkAnswer() {
       say('🎉 Excelente! Você acertou os 10 números e completou o jogo!', 'good');
       el('resultActions').hidden = true;
       el('start').disabled = false;
-      el('start').textContent = '↻ Jogar novamente';
+      el('start').textContent = '↻ Jogar novamente desde 4';
     } else {
       state = 'correct';
       el('instruction').textContent = 'Resposta correta! Avance quando estiver pronto.';
@@ -273,34 +261,32 @@ function handleKeyboard(event) {
 }
 
 (function initialize() {
+  var badges = document.querySelectorAll('[data-stage]');
+  for (var j = 0; j < badges.length; j++) {
+    badges[j].onclick = function () { selectStage(Number(this.getAttribute('data-stage'))); };
+    badges[j].setAttribute('role', 'button');
+    badges[j].setAttribute('tabindex', '0');
+    badges[j].onkeydown = function (event) { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); selectStage(Number(this.getAttribute('data-stage'))); } };
+  }
   var keys = document.querySelectorAll('[data-digit]');
   for (var i = 0; i < keys.length; i++) {
     keys[i].onclick = function () { pressDigit(this.getAttribute('data-digit')); };
   }
   el('backspace').onclick = eraseLast;
   el('clear').onclick = clearEntry;
-  el('startLevel').onchange = function () {
-    if (state === 'showing' || state === 'input') return;
-    startStage = Number(this.value);
-    stage = startStage;
-    resetChallenge('Você escolheu começar com ' + stage + ' números.');
-  };
   document.addEventListener('keydown', handleKeyboard);
-  startStage = Number(el('startLevel').value);
-  stage = startStage;
   showEntry();
-  el('cancelActions').hidden = true;
   updateStages();
   setKeys(false);
-  say('Jogo carregado. Escolha o nível inicial e clique em “Mostrar números”.');
+  say('Jogo carregado. Clique em “Mostrar números” para começar.');
 })();
 </script>
-
 <script>
-// Service worker is used on HTTPS hosting (such as GitHub Pages).
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
-    navigator.serviceWorker.register('./sw.js').catch(function () {});
+    navigator.serviceWorker.register('./sw.js').catch(function (err) {
+      console.log('Não foi possível registrar o modo offline:', err);
+    });
   });
 }
 </script>
