@@ -177,6 +177,41 @@ h1 { font-size: clamp(23px, 5.8vw, 29px); margin: 0 0 2px; }
   .message { min-height: 28px; padding-top: 3px; }
 }
 
+
+
+/* Ajuste exclusivo do aplicativo instalado na Tela de Início do iPhone.
+   No Safari normal, preserva o layout que o usuário confirmou estar correto. */
+@media (display-mode: standalone) {
+  body {
+    min-height: 100vh;
+    min-height: 100dvh;
+    padding-top: max(8px, env(safe-area-inset-top));
+    padding-bottom: max(8px, env(safe-area-inset-bottom));
+  }
+  .app {
+    min-height: calc(100vh - 16px);
+    min-height: calc(100dvh - 16px);
+  }
+  .panel {
+    flex: 1 1 auto;
+    justify-content: space-between;
+    gap: 4px;
+  }
+  .keypad { gap: 7px; }
+  .key { min-height: 53px; font-size: 25px; }
+  .actions { margin-top: 7px; }
+  .action { min-height: 46px; }
+  .message { margin-top: 4px; min-height: 32px; padding-top: 4px; }
+}
+@media (display-mode: standalone) and (max-height: 760px) {
+  .panel { padding-top: 7px; padding-bottom: 7px; }
+  .key { min-height: 50px; }
+  .sequence-box { min-height: 58px; margin: 4px 0; }
+  .actions { margin-top: 5px; }
+  .action { min-height: 44px; }
+  .message { min-height: 30px; }
+}
+
 </style>
 </head>
 <body>
