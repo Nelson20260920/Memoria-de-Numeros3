@@ -86,6 +86,63 @@ h1 { font-size: 24px; margin: 0; }
   .message { min-height: 24px; padding-top: 4px; }
 }
 
+
+
+/* Correcao visual v2: botoes maiores e melhor uso da tela */
+html { min-height: 100%; }
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding: max(10px, env(safe-area-inset-top)) 10px max(12px, env(safe-area-inset-bottom));
+}
+.app {
+  min-height: calc(100vh - 22px);
+  min-height: calc(100dvh - 22px);
+  display: flex;
+  flex-direction: column;
+}
+header { margin: 4px 0 10px; }
+h1 { font-size: clamp(23px, 5.8vw, 29px); margin: 0 0 2px; }
+.panel {
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: clamp(12px, 2.4vh, 20px);
+  gap: 3px;
+}
+.progress { gap: 6px; margin-bottom: 10px; }
+.stage { padding: 8px 10px; font-size: 14px; }
+.status { min-height: 24px; font-size: 14px; }
+.sequence-box { min-height: clamp(78px, 12vh, 112px); margin: 10px 0; padding: 10px; }
+.sequence { font-size: clamp(30px, 8vw, 45px); line-height: 1.35; }
+.instruction { min-height: 24px; font-size: 14px; margin: 7px 0; }
+.entry { min-height: 42px; font-size: 29px; padding: 5px; }
+.counter { font-size: 13px; margin: 5px 0 12px; }
+.keypad { gap: 9px; width: 100%; max-width: 440px; }
+.key { min-height: clamp(58px, 8.5vh, 72px); font-size: 27px; border-radius: 13px; }
+.utility { font-size: 15px; }
+.actions { gap: 9px; margin-top: 13px; }
+.action { min-height: 54px; padding: 12px 10px; font-size: 16px; border-radius: 13px; }
+.message { min-height: 42px; padding-top: 10px; font-size: 14px; line-height: 1.45; margin-top: auto; }
+@media (max-width: 390px) {
+  .panel { padding: 11px; }
+  .stage { padding: 7px 8px; font-size: 13px; }
+  .key { min-height: clamp(56px, 8vh, 66px); font-size: 25px; }
+  .action { min-height: 52px; font-size: 15px; }
+}
+/* Em telas baixas, reduzir um pouco os espacamentos sem encolher os botoes */
+@media (max-height: 700px) {
+  .panel { padding-top: 9px; padding-bottom: 9px; }
+  .progress { margin-bottom: 6px; }
+  .sequence-box { min-height: 68px; margin: 6px 0; }
+  .instruction { margin: 4px 0; }
+  .counter { margin-bottom: 7px; }
+  .key { min-height: 54px; }
+  .actions { margin-top: 8px; }
+  .message { min-height: 30px; padding-top: 5px; }
+}
+
 </style>
 </head>
 <body>
